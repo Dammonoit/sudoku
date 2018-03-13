@@ -3,7 +3,7 @@ class sudoku:
         self.puzzle_name=puzzle_name
         self.read_puzzle(self.puzzle_name)
         self.empty_cells=self.zero_cells(self.puzzle)
-        print(self.empty_cells)
+      #  print(self.empty_cells)
     def zero_cells(self,puzzle):
         empty_cells=[]
         for i in range(len(puzzle)):
@@ -90,7 +90,36 @@ class sudoku:
                         return True
                 self.puzzle[c_cell[0]][c_cell[1]]=0
         return False
-
-
-s=sudoku('puzzle3.txt')
-print(s.simpleBT(s.empty_cells))
+    def legal_values(self,puzzle,cell):
+        row=self.get_row(puzzle,cell)
+        col=self.get_col(puzzle,cell)
+        cell=self.get_cell(puzzle,cell)
+        all=set(row).union(set(col)).union(set(cell))
+        ans=[]
+        for i in range(1,10):
+            if i not in all:
+                ans.append(i)
+        return ans
+    def zero_cells_mrv(self,puzzle):
+        empty_cells=[]
+        for i in range(len(puzzle)):
+            for j in range(len(puzzle[i])):
+                if puzzle[i][j]==0:
+                    l_v=self.legal_values(puzzle,(i,j))
+                    empty_cells.append((len(l_v),(i,j),l_v))
+        return sorted(empty_cells)
+    def MRV_BT_FC(self,):
+        if self.goal_state(self.puzzle):
+            self.print_puzzle(self.puzzle)
+            return True
+        else:
+            MRV_FC=self.zero_cells_mrv(self.puzzle)[0]
+            print(MRV_FC)
+            for legal_value in MRV_FC[2]:
+                self.puzzle[MRV_FC[1][0]][MRV_FC[1][1]]=legal_value           
+                if self.MRV_BT_FC():
+                    return True
+                self.puzzle[MRV_FC[1][0]][MRV_FC[1][1]]=0
+        return False
+s=sudoku('puzzle3.txt').MRV_BT_FC()
+#print(s.MRV_BT_FC(s.empty_cells))
