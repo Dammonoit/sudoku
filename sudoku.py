@@ -1,4 +1,5 @@
 import time,matplotlib as plt
+global nodes
 class sudoku:
     def __init__(self,puzzle_name):
         self.puzzle_name=puzzle_name
@@ -99,8 +100,11 @@ class sudoku:
       #      self.print_puzzle(self.puzzle)
             return True
         else:
+
             c_cell=empty_cells[0]
             for i in range(1,10):
+                global nodes
+                nodes+=1                
               #  print(c_cell,i)
                 if self.cell_check(self.puzzle,c_cell,i):
                     self.puzzle[c_cell[0]][c_cell[1]]=i
@@ -135,6 +139,8 @@ class sudoku:
             MRV_FC=self.zero_cells_mrv(self.puzzle)[0]
             #print(MRV_FC)
             for legal_value in MRV_FC[2]:
+                global nodes
+                nodes+=1
                 self.puzzle[MRV_FC[1][0]][MRV_FC[1][1]]=legal_value           
                 if self.MRV_BT_FC():
                     return True
@@ -220,7 +226,11 @@ df = (df.T)
 df.to_csv('dict1.xlsx')
 #print(s.MRV_BT_FC(s.empty_cells))
 '''
+
+
+nodes=0
 s=sudoku('puzzle3.txt')
-print(s.timed_BT())
+print(s.timed_BT(),nodes)
+nodes=0
 s=sudoku('puzzle3.txt')
-print(s.timed_MRV_BT_FC())
+print(s.timed_MRV_BT_FC(),nodes)
