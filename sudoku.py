@@ -226,11 +226,78 @@ df = (df.T)
 df.to_csv('dict1.xlsx')
 #print(s.MRV_BT_FC(s.empty_cells))
 '''
+import os
+t='/home/shivam/Projects/sudokus/'
+os.chdir(t)
+dr=os.listdir()
+st_bt={}
+st_mvr={}
 
+fn=0
+for dir in dr:
+    st_bt[dir]=[]
+    st_mvr[dir]=[]
+for dir in sorted(dr):
+    os.chdir(dir)    
+    for files in os.listdir():
+        print(fn,' ',files)
+        fn+=1
+        s=sudoku(files)
+        nodes=0
+        ts=s.timed_BT()
+        st_bt[dir].append((ts,nodes))
+        nodes=0
+        s=sudoku(files)
+        ts=s.timed_MRV_BT_FC()
+        st_mvr[dir].append((ts,nodes))
+    os.chdir(t)
 
-nodes=0
-s=sudoku('puzzle3.txt')
-print(s.timed_BT(),nodes)
-nodes=0
-s=sudoku('puzzle3.txt')
-print(s.timed_MRV_BT_FC(),nodes)
+sps_f={}
+for i in st:
+    a=[]
+    for v in st[i]:
+        a.append(v[1])
+    sps[i]=a
+spt_f={}
+for i in st:
+    a=[]
+    for v in st[i]:
+        a.append(v[0])
+    spt[i]=a
+
+sps_mv={}
+spt_mv={}
+
+for i in st_mvr:
+    a=[]
+    b=[]
+    for v in st_mvr[i]:
+        b.append(v[0])
+        a.append(v[1])
+    sps_mv[i]=a
+    spt_mv[i]=b    
+
+sps_bt={}
+spt_bt={}
+for i in st_bt:
+    a=[]
+    b=[]
+    for v in st_bt[i]:
+        b.append(v[0])
+        a.append(v[1])
+    sps_bt[i]=a
+    spt_bt[i]=b
+sps_bt.pop('feyn.csv')
+spt_bt.pop('feyn.csv')
+sps_mv.pop('feyn.csv')
+spt_mv.pop('feyn.csv')
+
+df=pd.DataFrame(sps_bt)
+df.to_csv('Steps_BT')
+df=pd.DataFrame(spt_bt)
+df.to_csv('Time_BT')
+
+df=pd.DataFrame(sps_mv)
+df.to_csv('Steps_MVR')
+df=pd.DataFrame(spt_mv)
+df.to_csv('Time_MVR')

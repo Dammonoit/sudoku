@@ -169,7 +169,9 @@ class sudoku:
         #s.print_empty()
         #return s.probablity()
     def probablity(self):
-        
+
+        global nodes
+        nodes+=1        
         self.probab=self.probablity_init()
         self.t=self.init_t()
         var={}
@@ -246,6 +248,8 @@ delete_list=[]
 for dir in sorted(dr):
     os.chdir(dir)    
     for files in os.listdir():
+        global nodes
+        nodes=0
         print(fn,' ',files)
         s=sudoku(files,9)
         fn+=1
@@ -261,23 +265,35 @@ for dir in sorted(dr):
                 delete_list.append(files)
                 break
             ans1=s.probablity()
-            check=True
+ #           print(len(ans1))
+            ap=[]            
             try:
-                while s.update((int(ans1[0][1][2]),int(ans1[0][1][4])),int(ans1[0][1][0]))==False:
-                    ans1=ans1[1:]
+                while True:
+                    if len(ans1)==0:
+                        break
+                    ck=s.update((int(ans1[0][1][2]),int(ans1[0][1][4])),int(ans1[0][1][0]))
+                    ap.append((int(ans1[0][1][2]),int(ans1[0][1][4])))
+                    if ck==False:
+                        ap.pop()
+                        ans1=ans1[1:]
+                    if ans1[1][0]>0.9:
+#                        print("hello")
+                        ans1=ans1[1:]
+                    else:
+                        break
             except Exception as identifier:
+                if s.goal_state(s.puzzle)==True:
+                    te=time.time()
+                    break
                 print("File error,", files, " exception ",identifier)
                 delete_list.append(files)
                 break
+#            print(ap)
             #print('1')
         #    input()
         #    print()
             #s.print_puzzle()
         #    print(s.count())
         #print('Puzzle '+files+' solved in: ',te-ts)
-        st[dir].append(te-ts)
+        st[dir].append((te-ts,nodes))
     os.chdir(t)
-import os
-def delete(lst):
-    for i in lst:
-        os.remove(i)
