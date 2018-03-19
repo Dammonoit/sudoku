@@ -297,3 +297,17 @@ for dir in sorted(dr):
         #print('Puzzle '+files+' solved in: ',te-ts)
         st[dir].append((te-ts,nodes))
     os.chdir(t)
+spf_s={}
+spf_t={}
+for i in st:
+    a=[]
+    b=[]
+    for v in st[i]:
+        b.append(v[0])
+        a.append(v[1])
+    spf_s[i]=a
+    spf_t[i]=b
+df=pd.DataFrame(spf_s)
+df.to_csv('Steps_F')
+df=pd.DataFrame(spf_t)
+df.to_csv('Time_F')

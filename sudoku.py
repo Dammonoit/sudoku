@@ -1,4 +1,5 @@
 import time,matplotlib as plt
+import pandas as pd
 global nodes
 class sudoku:
     def __init__(self,puzzle_name):
@@ -100,11 +101,11 @@ class sudoku:
       #      self.print_puzzle(self.puzzle)
             return True
         else:
-
+            global nodes
+            nodes+=1 
             c_cell=empty_cells[0]
             for i in range(1,10):
-                global nodes
-                nodes+=1                
+               
               #  print(c_cell,i)
                 if self.cell_check(self.puzzle,c_cell,i):
                     self.puzzle[c_cell[0]][c_cell[1]]=i
@@ -136,11 +137,11 @@ class sudoku:
             #self.print_puzzle(self.puzzle)
             return True
         else:
+            global nodes
+            nodes+=1
             MRV_FC=self.zero_cells_mrv(self.puzzle)[0]
             #print(MRV_FC)
             for legal_value in MRV_FC[2]:
-                global nodes
-                nodes+=1
                 self.puzzle[MRV_FC[1][0]][MRV_FC[1][1]]=legal_value           
                 if self.MRV_BT_FC():
                     return True
@@ -252,18 +253,6 @@ for dir in sorted(dr):
         st_mvr[dir].append((ts,nodes))
     os.chdir(t)
 
-sps_f={}
-for i in st:
-    a=[]
-    for v in st[i]:
-        a.append(v[1])
-    sps[i]=a
-spt_f={}
-for i in st:
-    a=[]
-    for v in st[i]:
-        a.append(v[0])
-    spt[i]=a
 
 sps_mv={}
 spt_mv={}
@@ -287,10 +276,7 @@ for i in st_bt:
         a.append(v[1])
     sps_bt[i]=a
     spt_bt[i]=b
-sps_bt.pop('feyn.csv')
-spt_bt.pop('feyn.csv')
-sps_mv.pop('feyn.csv')
-spt_mv.pop('feyn.csv')
+
 
 df=pd.DataFrame(sps_bt)
 df.to_csv('Steps_BT')
