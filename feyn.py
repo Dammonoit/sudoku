@@ -257,6 +257,8 @@ for dir in sorted(dr):
         te=0
         #s.print_probab()
         while True:
+            s.print_puzzle()
+
             if s.goal_state(s.puzzle)==True:
                 te=time.time()
                 break
@@ -265,7 +267,9 @@ for dir in sorted(dr):
                 delete_list.append(files)
                 break
             ans1=s.probablity()
- #           print(len(ans1))
+            print(ans1)
+            input()
+
             ap=[]            
             try:
                 while True:
